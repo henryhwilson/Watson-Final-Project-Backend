@@ -10,6 +10,9 @@ router.get('/', (req, res) => {
 router.route('/food')
   .post(Food.addFood);
 
+router.route('/food/:name')
+  .get(Food.getNutrition);
+
 // router.route('/food/:foodName')
 //   .delete(Food.deleteFood);
 

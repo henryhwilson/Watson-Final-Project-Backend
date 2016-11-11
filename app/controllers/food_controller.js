@@ -22,6 +22,25 @@ export const addFood = (req, res) => {
 //   res.send('delete a food');
 // };
 
+export const getNutrition = (req, res) => {
+  // Limits the response to 1 post
+  Food.find({ name: req.params.name }).limit(1).exec((error, foods) => {
+    const food = foods[0];
+    if (error === null && food && food.name) {
+      res.json({
+        name: food.name,
+        calories: food.calories,
+        totalFat: food.totalFat,
+        protein: food.protein,
+        totalCarb: food.totalCarb,
+        sugar: food.sugar,
+      });
+    } else {
+      res.json({ error: 'invalid_food' });
+    }
+  });
+};
+
 export const getCalories = (req, res) => {
   // Limits the response to 1 post
   Food.find({ name: req.params.name }).limit(1).exec((error, foods) => {
