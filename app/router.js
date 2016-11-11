@@ -14,7 +14,18 @@ router.route('/food')
 //   .delete(Food.deleteFood);
 
 router.route('/food/calories')
-  // .post(Food.setCalories)
   .get(Food.getCalories);
+
+router.route('/food/totalFat')
+  .get(Food.getTotalFat);
+
+router.route('/food/protein')
+  .get(Food.getProtein);
+
+router.route('/food/totalCarb')
+  .get(Food.getTotalCarb);
+
+router.route('/food/sugar')
+  .get(Food.getSugar);
 
 export default router;

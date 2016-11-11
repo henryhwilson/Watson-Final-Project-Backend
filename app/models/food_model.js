@@ -4,6 +4,10 @@ import mongoose, { Schema } from 'mongoose';
 const FoodSchema = new Schema({
   name: String,
   calories: Number,
+  totalFat: Number,
+  protein: Number,
+  totalCarb: Number,
+  sugar: Number,
 });
 
 // create model class

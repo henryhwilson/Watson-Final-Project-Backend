@@ -4,6 +4,10 @@ export const addFood = (req, res) => {
   const food = new Food();
   food.name = req.body.name;
   food.calories = req.body.calories;
+  food.totalFat = req.body.totalFat;
+  food.protein = req.body.protein;
+  food.totalCarb = req.body.totalCarb;
+  food.sugar = req.body.sugar;
 
   food.save()
   .then(result => {
@@ -20,15 +24,58 @@ export const addFood = (req, res) => {
 
 export const getCalories = (req, res) => {
   // Limits the response to 1 post
-  console.log(`Finding ${req.body.name}`);
   Food.find({ name: req.body.name }).limit(1).exec((error, foods) => {
-    // Retrieve first element in array
-    console.log('Found one');
-    console.log(foods);
-    console.log(error);
     const food = foods[0];
-    if (error === null && food && food.name && food.calories) {
+    if (error === null && food && food.name) {
       res.json({ name: food.name, calories: food.calories });
+    } else {
+      res.json({ error: 'invalid_food' });
+    }
+  });
+};
+
+export const getTotalFat = (req, res) => {
+  // Limits the response to 1 post
+  Food.find({ name: req.body.name }).limit(1).exec((error, foods) => {
+    const food = foods[0];
+    if (error === null && food && food.name) {
+      res.json({ name: food.name, totalFat: food.totalFat });
+    } else {
+      res.json({ error: 'invalid_food' });
+    }
+  });
+};
+
+export const getProtein = (req, res) => {
+  // Limits the response to 1 post
+  Food.find({ name: req.body.name }).limit(1).exec((error, foods) => {
+    const food = foods[0];
+    if (error === null && food && food.name) {
+      res.json({ name: food.name, protein: food.protein });
+    } else {
+      res.json({ error: 'invalid_food' });
+    }
+  });
+};
+
+export const getTotalCarb = (req, res) => {
+  // Limits the response to 1 post
+  Food.find({ name: req.body.name }).limit(1).exec((error, foods) => {
+    const food = foods[0];
+    if (error === null && food && food.name) {
+      res.json({ name: food.name, totalCarb: food.totalCarb });
+    } else {
+      res.json({ error: 'invalid_food' });
+    }
+  });
+};
+
+export const getSugar = (req, res) => {
+  // Limits the response to 1 post
+  Food.find({ name: req.body.name }).limit(1).exec((error, foods) => {
+    const food = foods[0];
+    if (error === null && food && food.name) {
+      res.json({ name: food.name, sugar: food.sugar });
     } else {
       res.json({ error: 'invalid_food' });
     }
