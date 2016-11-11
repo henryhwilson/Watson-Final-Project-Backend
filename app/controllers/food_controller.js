@@ -24,7 +24,7 @@ export const addFood = (req, res) => {
 
 export const getCalories = (req, res) => {
   // Limits the response to 1 post
-  Food.find({ name: req.body.name }).limit(1).exec((error, foods) => {
+  Food.find({ name: req.params.name }).limit(1).exec((error, foods) => {
     const food = foods[0];
     if (error === null && food && food.name) {
       res.json({ name: food.name, calories: food.calories });

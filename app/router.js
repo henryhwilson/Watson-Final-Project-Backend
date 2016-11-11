@@ -13,7 +13,7 @@ router.route('/food')
 // router.route('/food/:foodName')
 //   .delete(Food.deleteFood);
 
-router.route('/food/calories')
+router.route('/food/calories/:name')
   .get(Food.getCalories);
 
 router.route('/food/totalFat')
