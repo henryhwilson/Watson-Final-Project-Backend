@@ -16,16 +16,16 @@ router.route('/food')
 router.route('/food/calories/:name')
   .get(Food.getCalories);
 
-router.route('/food/totalFat')
+router.route('/food/totalFat/:name')
   .get(Food.getTotalFat);
 
-router.route('/food/protein')
+router.route('/food/protein/:name')
   .get(Food.getProtein);
 
-router.route('/food/totalCarb')
+router.route('/food/totalCarb/:name')
   .get(Food.getTotalCarb);
 
-router.route('/food/sugar')
+router.route('/food/sugar/:name')
   .get(Food.getSugar);
 
 export default router;

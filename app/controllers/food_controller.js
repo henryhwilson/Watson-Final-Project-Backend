@@ -36,7 +36,7 @@ export const getCalories = (req, res) => {
 
 export const getTotalFat = (req, res) => {
   // Limits the response to 1 post
-  Food.find({ name: req.body.name }).limit(1).exec((error, foods) => {
+  Food.find({ name: req.params.name }).limit(1).exec((error, foods) => {
     const food = foods[0];
     if (error === null && food && food.name) {
       res.json({ name: food.name, totalFat: food.totalFat });
@@ -48,7 +48,7 @@ export const getTotalFat = (req, res) => {
 
 export const getProtein = (req, res) => {
   // Limits the response to 1 post
-  Food.find({ name: req.body.name }).limit(1).exec((error, foods) => {
+  Food.find({ name: req.params.name }).limit(1).exec((error, foods) => {
     const food = foods[0];
     if (error === null && food && food.name) {
       res.json({ name: food.name, protein: food.protein });
@@ -60,7 +60,7 @@ export const getProtein = (req, res) => {
 
 export const getTotalCarb = (req, res) => {
   // Limits the response to 1 post
-  Food.find({ name: req.body.name }).limit(1).exec((error, foods) => {
+  Food.find({ name: req.params.name }).limit(1).exec((error, foods) => {
     const food = foods[0];
     if (error === null && food && food.name) {
       res.json({ name: food.name, totalCarb: food.totalCarb });
@@ -72,7 +72,7 @@ export const getTotalCarb = (req, res) => {
 
 export const getSugar = (req, res) => {
   // Limits the response to 1 post
-  Food.find({ name: req.body.name }).limit(1).exec((error, foods) => {
+  Food.find({ name: req.params.name }).limit(1).exec((error, foods) => {
     const food = foods[0];
     if (error === null && food && food.name) {
       res.json({ name: food.name, sugar: food.sugar });
