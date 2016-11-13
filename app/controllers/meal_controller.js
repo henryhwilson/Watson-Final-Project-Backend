@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 dotenv.config({ silent: true });
 
-export const addMeal = (req, res) => {
+export const addMealSMS = (req, res) => {
   console.log('Creating a meal...');
 
   const smsKey = req.body.smsKey;
@@ -50,10 +50,8 @@ export const addMeal = (req, res) => {
 };
 
 // Returns meals for the same calendar day
-export const getMeals = (req, res) => {
+export const getMealsSMS = (req, res) => {
   console.log('Getting meals');
-
-  console.log('Creating a meal...');
 
   const smsKey = req.body.smsKey;
 
@@ -108,6 +106,77 @@ export const getMeals = (req, res) => {
       }
     });
   }
+};
+
+export const addMeal = (req, res) => {
+  console.log('Creating a meal...');
+
+  // Make sure the food is valid
+  const foodName = req.body.foodName;
+  Food.findOne({ name: foodName }, (foodError, food) => {
+    if (!food) {
+      res.json({ error: 'No food was found with that name' });
+    } else if (foodError !== null) {
+      res.json({ error: foodError });
+    } else {
+      // Now we know there is a valid food. Create it!
+      const meal = new Meal();
+      meal.user = req.user._id;
+      meal.food = food._id;
+      meal.save()
+      .then(result => {
+        console.log(meal);
+        res.json({ message: 'Meal added!' });
+      })
+      .catch(createMealError => {
+        console.log(createMealError);
+        res.json({ createMealError });
+      });
+    }
+  });
+};
+
+// Returns meals for the same calendar day
+export const getMeals = (req, res) => {
+  console.log('Getting meals');
+
+  // Filter by date
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+  const end = new Date();
+  end.setHours(23, 59, 59, 999);
+
+  Meal.find({ user: req.user._id, date: { $gte: start, $lt: end } })
+  .sort('-date')
+  .populate('food')
+  .exec((error, meals) => {
+    if (error) {
+      res.json({ error });
+    } else {
+      const allMeals = [];
+      let calories = 0;
+      let totalFat = 0;
+      let protein = 0;
+      let totalCarb = 0;
+      let sugar = 0;
+      meals.forEach((meal) => {
+        allMeals.push({ id: meal._id, foodName: meal.food.name });
+        calories += meal.food.calories;
+        totalFat += meal.food.totalFat;
+        protein += meal.food.protein;
+        totalCarb += meal.food.totalCarb;
+        sugar += meal.food.sugar;
+      });
+      res.json({
+        meals: allMeals,
+        calories,
+        totalFat,
+        protein,
+        totalCarb,
+        sugar,
+      });
+    }
+  });
 };
 
 /*

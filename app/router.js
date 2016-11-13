@@ -21,8 +21,14 @@ router.route('/food')
 router.route('/food/:name')
   .get(FoodController.getNutrition);  // open access
 
+// Route for queries from Twilio. Requires an SMS Key to use.
 router.route('/smsMeal')
-  .post(MealController.addMeal)
-  .get(MealController.getMeals);
+  .post(MealController.addMealSMS)
+  .get(MealController.getMealsSMS);
+
+// Similar queries, but from web client. Requires auth.
+router.route('/meal')
+  .post(requireAuth, MealController.addMeal)
+  .get(requireAuth, MealController.getMeals);
 
 export default router;
