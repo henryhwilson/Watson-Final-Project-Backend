@@ -22,6 +22,6 @@ router.route('/food/:name')
   .get(FoodController.getNutrition);
 
 router.route('/meal')
-  .post(requireAuth, MealController.addMeal);
+  .post(MealController.addMeal);
 
 export default router;

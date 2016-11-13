@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 
 // create a schema for foods with a field
 const FoodSchema = new Schema({
-  name: String,
+  name: { type: String, unique: true },
   calories: Number,
   totalFat: Number,
   protein: Number,

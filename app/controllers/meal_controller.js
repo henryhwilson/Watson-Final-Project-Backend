@@ -1,23 +1,98 @@
 import Meal from '../models/meal_model';
+import Food from '../models/food_model';
+import User from '../models/user_model';
+import dotenv from 'dotenv';
 
-export const createPost = (req, res) => {
-  console.log('Creating post..');
-  const post = new Post();
-  post.title = cleanTitle(req.body.title);
-  post.tags = req.body.tags;
-  post.content = req.body.content;
-  post.author = req.user._id;
-  post.save()
-  .then(result => {
-    console.log(post);
-    res.json({ message: 'Post created!' });
-  })
-  .catch(error => {
-    console.log(error);
-    res.json({ error });
+dotenv.config({ silent: true });
+
+export const addMeal = (req, res) => {
+  console.log('Creating a meal...');
+
+  const smsKey = req.body.smsKey;
+
+  if (smsKey !== process.env.SMS_KEY) {
+    res.json({ error: 'Invalid smsKey. Please contact the developer.' });
+  } else {
+    // Make sure the user is valid
+    const phone = req.body.phone;
+    User.findOne({ phone }, (userError, user) => {
+      if (!user) {
+        res.json({ error: 'No user was found with that phone number' });
+      } else if (userError !== null) {
+        res.json({ userError });
+      } else {
+        // Make sure the food is valid
+        const foodName = req.body.foodName;
+        Food.findOne({ food: foodName }, (foodError, food) => {
+          if (!food) {
+            res.json({ error: 'No food was found with that name' });
+          } else if (foodError !== null) {
+            res.json({ error: foodError });
+          } else {
+            // Now we know there is a valid food. Create it!
+            const meal = new Meal();
+            meal.user = user._id;
+            meal.food = food._id;
+            meal.save()
+            .then(result => {
+              console.log(meal);
+              res.json({ message: 'Meal added!' });
+            })
+            .catch(createMealError => {
+              console.log(createMealError);
+              res.json({ createMealError });
+            });
+          }
+        });
+      }
+    });
+  }
+};
+
+// Returns meals for the same calendar day
+export const getMeals = (req, res) => {
+  console.log('Getting meals');
+
+  // Filter by date
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+  const end = new Date();
+  end.setHours(23, 59, 59, 999);
+
+  Meal.find({ user: req.user._id, date: { $gte: start, $lt: end } })
+  .sort('-date')
+  .populate('food')
+  .exec((error, meals) => {
+    if (error) {
+      res.json({ error });
+    } else {
+      const allMeals = [];
+      let calories = 0;
+      let totalFat = 0;
+      let protein = 0;
+      let totalCarb = 0;
+      let sugar = 0;
+      meals.forEach((meal) => {
+        allMeals.push({ id: meal._id, foodName: meal.food.name });
+        calories += meal.food.calories;
+        totalFat += meal.food.totalFat;
+        protein += meal.food.protein;
+        totalCarb += meal.food.totalCarb;
+        sugar += meal.food.sugar;
+      });
+      res.json({
+        meals: allMeals,
+        calories,
+        totalFat,
+        protein,
+        totalCarb,
+        sugar,
+      });
+    }
   });
 };
 
+/*
 export const getPosts = (req, res) => {
   console.log('Getting posts');
   Post.find()
@@ -71,3 +146,4 @@ export const updatePost = (req, res) => {
     }
   });
 };
+*/

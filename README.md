@@ -15,7 +15,7 @@ Procfile set up to run on [heroku](https://devcenter.heroku.com/articles/getting
 
 # meal table
 (user, food, date)
-* POST [token, foodName] -> /api/meal
+* POST [smsKey, phone, foodName] -> /api/meal
 
 # user table
 (phone, password)
