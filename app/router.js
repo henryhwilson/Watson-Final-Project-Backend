@@ -14,15 +14,14 @@ router.get('/', (req, res) => {
 router.post('/signin', requireSignin, UserController.signin);
 router.post('/signup', UserController.signup);
 
-// TODO: Remove this route, or require some sort of key
 router.route('/food')
-  .get(FoodController.getFoods)
-  .post(FoodController.addFood);
+  .get(FoodController.getFoods)   // open access
+  .post(FoodController.addFood);  // requires adminKey
 
 router.route('/food/:name')
-  .get(FoodController.getNutrition);
+  .get(FoodController.getNutrition);  // open access
 
-router.route('/meal')
+router.route('/smsMeal')
   .post(MealController.addMeal)
   .get(MealController.getMeals);
 

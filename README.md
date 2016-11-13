@@ -40,3 +40,6 @@ Sample output:
 (phone, password)
 * POST [phone, password] -> /api/signup (returns token)
 * POST [phone, password] -> /api/signin (returns token)
+
+
+return data.intents && data.intents.length > 0 && data.intents[0].intent === 'add_food';
