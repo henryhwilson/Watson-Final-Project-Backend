@@ -8,5 +8,6 @@ Procfile set up to run on [heroku](https://devcenter.heroku.com/articles/getting
 
 # backend data structure
 
-table: food
-columns: id, name, calories
+1. food table (name, calories, totalFat, protein, totalCarb, sugar)
+2. meal table (user, food, date)
+3. user table (phone, password)
