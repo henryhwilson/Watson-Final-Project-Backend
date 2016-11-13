@@ -5,7 +5,6 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 
 import apiRouter from './router';
-
 // initialize
 const app = express();
 
