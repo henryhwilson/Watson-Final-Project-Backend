@@ -8,6 +8,7 @@ router.get('/', (req, res) => {
 });
 
 router.route('/food')
+  .get(Food.getFoods)
   .post(Food.addFood);
 
 router.route('/food/:name')

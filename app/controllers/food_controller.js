@@ -18,6 +18,26 @@ export const addFood = (req, res) => {
   });
 };
 
+export const getFoods = (req, res) => {
+  console.log('Getting foods');
+  Food.find()
+  .sort('name')
+  .exec((error, foods) => {
+    if (!error && foods) {
+      res.json(foods.map(food => {
+        return {
+          name: food.name,
+          calories: food.calories,
+          totalFat: food.totalFat,
+          protein: food.protein,
+          totalCarb: food.totalCarb,
+          sugar: food.sugar,
+        };
+      }));
+    }
+  });
+};
+
 // export const deleteFood = (req, res) => {
 //   res.send('delete a food');
 // };
