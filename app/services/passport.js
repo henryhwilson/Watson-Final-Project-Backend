@@ -7,7 +7,7 @@ import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import User from '../models/user_model';
 import dotenv from 'dotenv';
 
-dotenv.config({ silent: true });
+// dotenv.config({ silent: true });
 
 // options for local strategy, we'll use phone AS the username
 // not have separate ones
