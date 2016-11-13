@@ -11,7 +11,7 @@ export const addMeal = (req, res) => {
   const smsKey = req.body.smsKey;
 
   if (smsKey !== process.env.SMS_KEY) {
-    res.json({ error: 'Invalid smsKey. Please contact the developer.' });
+    res.json({ error: 'Invalid smsKey. Please contact the developer.', smsKey, other: process.env.SMS_KEY });
   } else {
     // Make sure the user is valid
     const phone = req.body.phone;
