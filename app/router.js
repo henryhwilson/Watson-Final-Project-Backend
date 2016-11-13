@@ -1,5 +1,8 @@
 import { Router } from 'express';
+import { requireAuth, requireSignin } from './services/passport';
+
 import * as Food from './controllers/food_controller';
+import * as UserController from './controllers/user_controller';
 
 const router = Router();
 
@@ -7,11 +10,17 @@ router.get('/', (req, res) => {
   res.json({ message: 'welcome to our food api!' });
 });
 
+router.post('/signin', requireSignin, UserController.signin);
+router.post('/signup', UserController.signup);
+
 router.route('/food')
   .post(Food.addFood);
 
 router.route('/food/:name')
   .get(Food.getNutrition);
+
+// router.route('/eat')
+//   .post(requireAuth, Eaten.addFood);
 
 // router.route('/food/:foodName')
 //   .delete(Food.deleteFood);
