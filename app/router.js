@@ -22,6 +22,7 @@ router.route('/food/:name')
   .get(FoodController.getNutrition);
 
 router.route('/meal')
-  .post(MealController.addMeal);
+  .post(MealController.addMeal)
+  .get(MealController.getMeals);
 
 export default router;

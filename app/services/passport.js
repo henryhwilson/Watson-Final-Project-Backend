@@ -6,8 +6,11 @@ import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 // and import User and your config with the secret
 import User from '../models/user_model';
 import dotenv from 'dotenv';
+dotenv.config();
 
-// dotenv.config({ silent: true });
+// dotenv.config({ path: '/.env' });
+
+// dotenv.config({ path: __dirname + '/.env' });
 
 // options for local strategy, we'll use phone AS the username
 // not have separate ones

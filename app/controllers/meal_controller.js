@@ -23,7 +23,7 @@ export const addMeal = (req, res) => {
       } else {
         // Make sure the food is valid
         const foodName = req.body.foodName;
-        Food.findOne({ food: foodName }, (foodError, food) => {
+        Food.findOne({ name: foodName }, (foodError, food) => {
           if (!food) {
             res.json({ error: 'No food was found with that name' });
           } else if (foodError !== null) {
@@ -53,43 +53,61 @@ export const addMeal = (req, res) => {
 export const getMeals = (req, res) => {
   console.log('Getting meals');
 
-  // Filter by date
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
-  const end = new Date();
-  end.setHours(23, 59, 59, 999);
+  console.log('Creating a meal...');
 
-  Meal.find({ user: req.user._id, date: { $gte: start, $lt: end } })
-  .sort('-date')
-  .populate('food')
-  .exec((error, meals) => {
-    if (error) {
-      res.json({ error });
-    } else {
-      const allMeals = [];
-      let calories = 0;
-      let totalFat = 0;
-      let protein = 0;
-      let totalCarb = 0;
-      let sugar = 0;
-      meals.forEach((meal) => {
-        allMeals.push({ id: meal._id, foodName: meal.food.name });
-        calories += meal.food.calories;
-        totalFat += meal.food.totalFat;
-        protein += meal.food.protein;
-        totalCarb += meal.food.totalCarb;
-        sugar += meal.food.sugar;
-      });
-      res.json({
-        meals: allMeals,
-        calories,
-        totalFat,
-        protein,
-        totalCarb,
-        sugar,
-      });
-    }
-  });
+  const smsKey = req.body.smsKey;
+
+  if (smsKey !== process.env.SMS_KEY) {
+    res.json({ error: 'Invalid smsKey. Please contact the developer.' });
+  } else {
+    // Make sure the user is valid
+    const phone = req.body.phone;
+    User.findOne({ phone }, (userError, user) => {
+      if (!user) {
+        res.json({ error: 'No user was found with that phone number' });
+      } else if (userError !== null) {
+        res.json({ userError });
+      } else {
+        // Filter by date
+        const start = new Date();
+        start.setHours(0, 0, 0, 0);
+        const end = new Date();
+        end.setHours(23, 59, 59, 999);
+
+        Meal.find({ user: user._id, date: { $gte: start, $lt: end } })
+        .sort('-date')
+        .populate('food')
+        .exec((error, meals) => {
+          if (error) {
+            res.json({ error });
+          } else {
+            const allMeals = [];
+            let calories = 0;
+            let totalFat = 0;
+            let protein = 0;
+            let totalCarb = 0;
+            let sugar = 0;
+            meals.forEach((meal) => {
+              allMeals.push({ id: meal._id, foodName: meal.food.name });
+              calories += meal.food.calories;
+              totalFat += meal.food.totalFat;
+              protein += meal.food.protein;
+              totalCarb += meal.food.totalCarb;
+              sugar += meal.food.sugar;
+            });
+            res.json({
+              meals: allMeals,
+              calories,
+              totalFat,
+              protein,
+              totalCarb,
+              sugar,
+            });
+          }
+        });
+      }
+    });
+  }
 };
 
 /*
