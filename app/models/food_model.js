@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-// create a schema for posts with a field
+// create a schema for foods with a field
 const FoodSchema = new Schema({
   name: String,
   calories: Number,
