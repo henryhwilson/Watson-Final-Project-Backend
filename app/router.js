@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { requireAuth, requireSignin } from './services/passport';
 
-import * as Food from './controllers/food_controller';
+import * as FoodController from './controllers/food_controller';
+import * as MealController from './controllers/meal_controller';
 import * as UserController from './controllers/user_controller';
 
 const router = Router();
@@ -13,31 +14,14 @@ router.get('/', (req, res) => {
 router.post('/signin', requireSignin, UserController.signin);
 router.post('/signup', UserController.signup);
 
+// TODO: Remove this route, or require some sort of key
 router.route('/food')
-  .post(Food.addFood);
+  .post(FoodController.addFood);
 
 router.route('/food/:name')
-  .get(Food.getNutrition);
+  .get(FoodController.getNutrition);
 
-// router.route('/eat')
-//   .post(requireAuth, Eaten.addFood);
-
-// router.route('/food/:foodName')
-//   .delete(Food.deleteFood);
-
-router.route('/food/calories/:name')
-  .get(Food.getCalories);
-
-router.route('/food/totalFat/:name')
-  .get(Food.getTotalFat);
-
-router.route('/food/protein/:name')
-  .get(Food.getProtein);
-
-router.route('/food/totalCarb/:name')
-  .get(Food.getTotalCarb);
-
-router.route('/food/sugar/:name')
-  .get(Food.getSugar);
+router.route('/meal')
+  .post(requireAuth, MealController.addMeal);
 
 export default router;
